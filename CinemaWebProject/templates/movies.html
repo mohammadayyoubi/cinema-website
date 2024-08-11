@@ -17,14 +17,9 @@
   <header>
     <div class="navbar">
       <div class="navbar-container">
-        <input type="checkbox" id="check">
-            <label for="check" class="checkbtn">
-                <i class="fas fa-bars "></i>
-            </label>
         <div class="logo-container">
           <h1 class="logo"><a href="{{ url_for('index') }}">Cinema</a></h1>
         </div>
-        
         <div class="menu-container">
           <ul class="menu-list">
             <li class="menu-list-item"><a href="{{ url_for('movies') }}">Movies</a></li>
@@ -129,17 +124,17 @@
           {% for movies in new_releases %}
           <div class="box">
             <div class="box-img">
-              <img src="/static/img/{{ movies.fileInput }}" alt="{{ movies.movieName }}">
+              <img src="/static/img/{{ movies.fileInput }}" alt="{{ movies.movieName }}" on>
             </div>
             <h3>{{ movies.movieName }}</h3>
             <span>{{ movies.duration }} min</span>
             <button class="movie-list-item-button">
-              <a href="{{ url_for('book') }}">Book</a>
+              <a href="{{ url_for('book', movie_id=movies.id) }}">Book</a>
             </button>
             <div class="edit-delete-buttons" style="display: none">
               <a href="{{ url_for('edit_movie', movie_id=movies.id) }}">
                 <i class="fas fa-pencil-alt green-icon_pen"></i>
-              </a>
+              </a><!-- Delete button with trash icon -->
               <form id="delete-form-{{ movies.id }}" action="{{ url_for('delete_movie', movie_id=movies.id) }}"
                 method="post" style="display: inline">
                 <button type="submit"><i class="fas fa-trash-alt red-icon_trash"></i></button>

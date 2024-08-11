@@ -78,7 +78,8 @@ a {
 
 .navbar-search {
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  
 }
 
 .navbar-search input[type="text"] {
@@ -315,6 +316,7 @@ select {
 .arrow {
   font-size: 120px;
   position: absolute;
+
   top: 90px;
   right: 0;
   color: lightgray;
@@ -336,9 +338,6 @@ select {
   color: black;
 }
 
-.sidebar.active {
-  background-color: white;
-}
 
 .left-menu-icon.active {
   color: black;
@@ -361,7 +360,10 @@ select {
   /* .profile-container {
     display: none;
   } */
-
+  .toggle{
+    display: none;
+  }
+  
   .navbar,
   .logo {
     font-size: x-large;
@@ -375,8 +377,8 @@ select {
   .checkbtn {
     display: block;
     font-size: 20px;
-    margin-right: 7px;
-    margin-left: 4px;
+    margin-right:7px;
+    margin-left: 0px;
   }
 
   .menu-container {
@@ -386,27 +388,30 @@ select {
     height: 100vh;
     background-color: #151515;
     top: 70px;
-    left: 0;
-    /* Adjusted to fix the menu on the left side */
+    left: 0; 
     text-align: center;
     transition: all .5s;
-    z-index: 1000;
-    /* Ensure the menu is above other content */
+    z-index: 1000; 
   }
-
-  .profile-container {
-    margin-left: 35%;
-    width: 7%;
+  .profile-container{
+   width: 7%;
+   margin: 0%;
+  }
+  .search_btn{
+    display: none;
+  }
+  .profile-text-container{
+    margin-left: 0%;
+    margin-right: 0%;
   }
 
   .navbar-search input[type="text"] {
-    width: 100px;
-    padding: 8px;
+    width: 80px;
+    /* padding: 8px; */
     border: 1px solid #ccc;
     border-radius: 4px;
-    margin-right: 5px;
+    /* margin-right: 80%; */
   }
-
   .navbar-container ul {
     list-style: none;
     padding: 0;
@@ -425,13 +430,13 @@ select {
     color: #4dbf00;
   }
 
-  #check:checked~.menu-container {
+  #check:checked ~ .menu-container {
     display: flex;
     flex-direction: column;
     transition: all .5s;
   }
 
-  .movies>.buttons_movies>a {
+  .movies > .buttons_movies > a {
     background-color: #4dbf00;
     color: white;
     border-radius: 10px;
@@ -812,21 +817,6 @@ select {
 
 /* Responsive adjustments */
 @media only screen and (max-width: 768px) {
-   .toggle {
-    display: none;
-  } 
-  .profile-picture{
-    /* display: none; */
-    margin-left: 2px;
-    margin-right: 0%;
-  }
-  .profile-text-container{
-    margin-left: 2px;
-  }
-  .box{
-    width: 90%;
-    margin-left: 30px;
-  }
   .menu-item {
     width: calc(100% - 20px);
     /* Full width on smaller screens */
@@ -1048,22 +1038,31 @@ select {
   margin-bottom: 30px;
 }
 
+.seat-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 .seat {
   background-color: #444451;
   height: 26px;
   width: 32px;
   margin: 3px;
-  font-size: 50px;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  color: white;
 }
-
 .seat.selected {
   background-color: green;
 }
-
 .seat.sold {
   background-color: #fff;
+  cursor: not-allowed;
 }
 
 .seat:nth-of-type(2) {
@@ -1362,7 +1361,7 @@ p.text span {
   background: #23242a;
   border: 1px solid #333;
   border-radius: 5px;
-  width: 500px;
+  width: 300px;
   padding: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -1402,7 +1401,7 @@ p.text span {
 }
 
 .film-card-button a:hover {
-  background: #388704;
+  background: #429f04;
 }
 
 .main-container > h1 {
@@ -1427,7 +1426,7 @@ p.text span {
   }
 
   .film-card {
-      width: 90%;
+      width: 85%;
   }
 }
 

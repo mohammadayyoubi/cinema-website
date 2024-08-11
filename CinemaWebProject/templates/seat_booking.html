@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <title>Movie Seat Booking</title>
+</head>
+<body class="seat_index">
+  <div class="movie-container2">
+    <label>Movie Name:</label>
+    <select id="movie2">
+      <option value="{{ movie.movieId }}">{{ movie.movieName }}</option>
+    </select>
+    <br><br>
+    <label for="showTime">Show Time</label>
+    <select id="showTime">
+      <option value="220">{{ movie.movieTime }}</option>
+    </select>
+  </div>
+
+  <ul class="showcase">
+    <li>
+      <div class="seat"></div>
+      <small>Available</small>
+    </li>
+    <li>
+      <div class="seat selected"></div>
+      <small>Selected</small>
+    </li>
+    <li>
+      <div class="seat sold"></div>
+      <small>Sold</small>
+    </li>
+  </ul>
+
+  <div class="container2">
+    <div class="screen"></div>
+
+    <!-- Dynamically generate seat rows and columns -->
+    {% for row in seat_layout %}
+    <div class="row">
+      <div class="seat-container">
+        {% for seat in row %}
+        <div class="{{seat.htmlClass}}" id="{{ seat.seatId }}"
+          onclick="selectSeat('{{ seat.seatId }}')">
+          {{ seat.seatNumber }}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <p>You have selected <span id="count">0</span> seat(s) for a price of $<span id="total">0</span>.</p>
+
+  <form id="bookingForm" method="post" action="{{ url_for('save_seating', movie_id=movie.movieId) }}">
+    <input type="hidden" id="selectedSeats" name="seats" value="">
+    <div class="seat_savebutton">
+      <button type="button" class="cancel" data-url="{{ url_for('index') }}" onclick="redirectToUrl(this)">Cancel</button>
+<script>
+function redirectToUrl(button) {
+  const url = button.getAttribute('data-url');
+  window.location.href = url;
+}
+</script>
+
+      <button type="submit" class="submit" id="saveButton">Save</button>
+    </div>
+  </form>
+
+  <script src="/static/js/script.js"></script>
+</body>
+</html>
