@@ -28,7 +28,7 @@ function updateSelectedCount() {
   count.innerText = selectedSeatsCount;
   total.innerText = selectedSeatsCount * ticketPrice;
 
-  
+
 }
 
 // Movie select event listener
@@ -55,20 +55,74 @@ function selectSeat(seatId) {
   const seatElement = document.getElementById(seatId);
 
   // Check if the seat is already selected
-  if (seatElement.classList.contains('selected')) {
-    // Deselect the seat
-    seatElement.classList.remove('selected');
-    // Remove seatId from selectedSeats array
-    updateSelectedCount();
-    
+  if (!seatElement.classList.contains('sold')) {
+    if (seatElement.classList.contains('selected')) {
+      // Deselect the seat
+      seatElement.classList.remove('selected');
+      // Remove seatId from selectedSeats array
+      updateSelectedCount();
+
+    } else {
+      // Select the seat
+      seatElement.classList.add('selected');
+      // Add seatId to selectedSeats array
+      updateSelectedCount();
+
+    }
   } else {
-    // Select the seat
-    seatElement.classList.add('selected');
-    // Add seatId to selectedSeats array
-    updateSelectedCount();
-   
+    alert('Seat is sold out!')
   }
 }
+
+function redirectToUrl(button) {
+  const url = button.getAttribute('data-url');
+  window.location.href = url;
+}
+function redirectTo(select) {
+  var url = select.value;
+  window.location.href = url;
+}
+
 // Initial setup
 populateUI();
 updateSelectedCount();
+
+
+
+function toggle() {
+  var blur = document.getElementById('movies');
+  blur.classList.toggle('active');
+  var popup = document.getElementById('popup');
+  popup.classList.toggle('active');
+}
+
+function toggleEditButtons() {
+  const buttons = document.querySelectorAll('.edit-delete-buttons');
+  buttons.forEach(button => {
+      button.style.display = button.style.display === 'none' ? 'block' : 'none';
+  });
+}
+//////////////////////////////////////////Edit profile js ///////////////////////////
+
+function openProfilePopup() {
+  document.getElementById('popupProfile').style.display = 'block';
+}
+
+
+//////////////////////////// menu popups ////////////////////////////////
+function openCategoryPopup() {
+  document.getElementById('popupCategory').style.display = 'block';
+}
+function closeCategoryPopup() {
+  document.getElementById('popupCategory').style.display = 'none';
+}
+
+
+function closeItemPopup() {
+  document.getElementById('popupItem').style.display = 'none';
+}
+
+function openItemPopup() {
+  document.getElementById('popupItem').style.display = 'block';
+}
+

@@ -140,7 +140,7 @@ a {
 }
 
 select {
-  background-color: black;
+  background-color: rgb(53, 52, 52);
   border: black;
   color: white;
   font-size: 16px;
@@ -436,16 +436,7 @@ select {
     transition: all .5s;
   }
 
-  .movies > .buttons_movies > a {
-    background-color: #4dbf00;
-    color: white;
-    border-radius: 10px;
-    font-size: 14px !important;
-    margin-left: 25% !important;
-    margin-top: 30px;
-    padding: 10px 20px;
-    text-align: center;
-  }
+  
 }
 
 
@@ -592,7 +583,8 @@ select {
 }
 
 .popupProfile h2 {
-  margin-top: 0;
+  /* margin-bottom: 20 !important; */
+  color: rgb(29, 28, 28);
 }
 
 .popupProfile form .form-group {
@@ -628,8 +620,8 @@ select {
 }
 
 .popupProfile form button[type="button"] {
-  background-color: #ccc;
-  color: #333;
+  background-color: #f30707;
+  color: #f8f4f4;
   margin-right: 10px;
 }
 
@@ -757,19 +749,17 @@ select {
   padding: 20px;
 }
 
-.food-menu h2,
-.drinks-menu h2 {
+.food-menu h2 {
   font-size: 33px;
-  margin: 20px;
+  margin: 10px;
   color: white;
 }
 
 /* Menu section container */
-.food-menu,
-.drinks-menu {
-  display: flex;
-  flex-wrap: wrap;
+.food-menu {
+  margin-left: 40px;
   justify-content: center;
+  display: block; 
 }
 
 /* Individual menu item styles */
@@ -1283,8 +1273,9 @@ p.text span {
   }
 
   .form-group input,
-  .form-group button {
+  .form-group button,h2 {
       width: 100%;
+      /* color: black; */
   }
 
   .form-group .role-options {
@@ -1443,4 +1434,23 @@ p.text span {
 
 .back-button:hover {
   background-color: #429f04;
+}
+
+/* Styles for admin Edit menu */
+
+.buttons_menu{
+  /* display: flex; */
+  margin-top: 40px;
+  margin-bottom: 20px;
+  margin-right: 100px;
+  justify-content: center;
+}
+
+.buttons_menu>a{
+  background-color: #4dbf00;
+  color: white;
+  border-radius: 10px;
+  font-size: large;
+  margin-left: 20%;
+  padding: 10px 20px;
 }

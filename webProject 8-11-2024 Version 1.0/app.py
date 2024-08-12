@@ -58,13 +58,12 @@ class Movie(db.Model):
 class room(db.Model):
     __tablename__ = "rooms"
     roomId = db.Column(db.Integer, primary_key=True)
-    NbSeats = db.Column(db.Integer, unique=True, nullable=False)
+    NbSeats = db.Column(db.Integer, nullable=False)
     available = db.Column(db.Boolean)
 
     def __repr__(self):
         return "<room {}>".format(self.roomId)
-
-
+    
 class Seat(db.Model):
     __tablename__ = "seats"
 
@@ -80,7 +79,7 @@ class Seat(db.Model):
         return f"<Seat {self.seatId} in Room {self.room_id}>"
 
 
-class ticket(db.Model):
+class Ticket(db.Model):
     __tablename__ = "tickets"
     id = db.Column(db.Integer, primary_key=True)
     movieId = db.Column(db.Integer, db.ForeignKey("movies.id"))
@@ -93,10 +92,32 @@ class ticket(db.Model):
     def __repr__(self):
         return f"<Ticket {self.id}>"
 
+############################## menu backend ####################################33
+class Item(db.Model):
+    __tablename__ = "items"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    price = db.Column(db.Double, nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    categoryName= db.Column(db.String(100),db.ForeignKey("categories.name", ondelete='CASCADE'))  
+    def __repr__(self):
+        return f"<Item {self.name}>"
+    
+class Category(db.Model):
+    __tablename__ = "categories"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    items = db.relationship('Item', backref='category', cascade="all, delete-orphan", passive_deletes=True)
+
+    def __repr__(self):
+        return f"<Category {self.name}>"
+    
+    
 
 # Create the database tables
 with app.app_context():
     db.create_all()
+
 
 
 # User Loader for Flask-Login
@@ -256,30 +277,41 @@ def save_seating(movie_id):
     movie = Movie.query.get_or_404(movie_id)
     selected_seats = request.form.get("seats", "").split(",")
     user_id = current_user.id  # Ensure this gives the correct user ID
-
+    print(selected_seats)
+    found=False
     for seat_id in selected_seats:
         seat = Seat.query.filter_by(
             seatId=seat_id, room_id=movie.room
         ).first()  # Include room_id in the filter
-        if seat:
+        print(seat)
+
+        if seat and seat.available:
             seat.available = False
             seat.reservedBy = user_id
             seat.htmlClass = "seat sold"
+            print("success sold")
+            found=True
+            try:
+                db.session.commit()
+                print("comited")
+            except Exception as e:
+                db.session.rollback()
+                print(f"Error: {e}")
+                return("Error: Could not reserve seat", 500)
+        else:
+            found=False
+    if found:
 
-    try:
-        db.session.commit()
-    except Exception as e:
-        db.session.rollback()
-        print(f"Error: {e}")
-        # Optionally, you can also add a flash message or redirect with an error message
-
-    return redirect(url_for("index"))
-
+        return redirect(url_for("index"))
+    else:
+        return("Error: Could not reserve seat", 500)
 
 @app.route("/menu")
 def menu():
     user = User.query.filter_by(id=current_user.id).first()
-    return render_template("menu.html", user=current_user)
+    items = Item.query.all()
+    categories = Category.query.all()
+    return render_template("menu.html", user=current_user, categories=categories,items=items)
 
 
 # Logout Route
@@ -467,6 +499,53 @@ def deleteUser():
         flash("User not found!", "error")
     return render_template("profile.html", user=current_user)
 
+@app.route("/AddCategory", methods=['POST','GET'])
+def AddCategory():
+    if request.method == 'POST':
+        name = request.form['category-name']
+        new_category = Category(
+            name=name
+        )
+        db.session.add(new_category)
+        db.session.commit()
+        return redirect(url_for('menu'))
+
+@app.route("/AddItem", methods=['POST','GET'])
+def AddItem():
+    if request.method == 'POST':
+        name = request.form['item-name']
+        price = request.form['item-price']
+        description = request.form['item-description']
+        category = request.form['item-category']
+        new_item = Item(
+            name=name,
+            price=price,
+            description=description,
+            categoryName=category
+        )
+        db.session.add(new_item)
+        db.session.commit()
+        return redirect(url_for('menu'))
+    
+@app.route("/deleteItem/<int:item_id>",methods=["POST"])
+def delete_item(item_id):
+    item = Item.query.get_or_404(item_id)
+    db.session.delete(item)
+    db.session.commit()
+    return redirect(url_for("menu"))
+
+@app.route("/delete_category/<int:category_id>", methods=["POST"])
+def delete_category(category_id):
+    category = Category.query.get_or_404(category_id)
+    db.session.delete(category)
+    db.session.commit()
+    return redirect(url_for("menu"))
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
