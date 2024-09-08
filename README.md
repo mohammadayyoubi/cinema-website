@@ -76,10 +76,16 @@ Welcome to the Cinema Website project, a web application built using Flask that 
      ```
 
 6. **Initialize the database:**
+   - first in python script make sure you fill the app.config correctly to be contain the right (username / password / host / name of database) in your laptop...
+   - second:
    ```bash
    flask db init
    flask db migrate
    flask db upgrade
+
+8. **insert the data of rooms & seats:**
+   - you can find .txt file named "db seats + room" it contains set of commands to insert the data... Please copy paste them in workbench to be inserted.
+   - soon we will fix it to be automatically inserted with opn :)
    ```
 
 ## 🚀 Usage
