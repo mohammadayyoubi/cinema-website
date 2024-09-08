@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search Results</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+  <div class="main-container">
+    <div class="head-result">
+    <h1>Search Results for "<span id="query-text">{{ query }}</span>"</h1>
+    <input type="text" id="search-bar" class="search-bar" placeholder="Search movies..." onkeyup="performSearch()" />
+  </div>
+    <div class="film-grid" id="film-grid">
+      <!-- AJAX Search results will be dynamically inserted here -->
+      {% if search_results %}
+        {% for movie in search_results %}
+          <div class="film-card">
+            <img class="film-card-img" src="{{ url_for('serve_image', movie_id=movie.id) }}" 
+              alt="{{ movie.movieName }}" 
+              onclick="window.location.href='{{ url_for('book', movie_id=movie.id) }}'" />
+            <span class="film-card-title">{{ movie.movieName }}</span>
+            <p class="film-card-desc">{{ movie.description }}</p>
+            <a href="{{ url_for('book', movie_id=movie.id) }}" class="film-card-Vbutton">Book</a>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p id="no-results">No results found for "{{ query }}".</p>
+      {% endif %}
+    </div>
+
+    <button onclick="window.location.href='{{ url_for('index') }}'" class="back-button">Back</button>
+  </div>
+
+  <script>
+    function performSearch() {
+      var query = $('#search-bar').val();  // Get the query from input
+
+      if (query.length > 0) {
+        $.ajax({
+          url: '/search',
+          type: 'GET',
+          data: { query: query },
+          dataType: 'json',
+          success: function(response) {
+            $('#film-grid').empty();  // Clear existing results
+            $('#query-text').text(query);  // Update query text in title
+
+            if (response.length > 0) {
+              // Loop through the movies and display them dynamically
+              response.forEach(function(movie) {
+                $('#film-grid').append(`
+                  <div class="film-card">
+                    <img class="film-card-img" src="${movie.img_url}" alt="${movie.movieName}" 
+                      onclick="window.location.href='${movie.book_url}'" />
+                    <span class="film-card-title">${movie.movieName}</span>
+                    <p class="film-card-desc">${movie.description}</p>
+                    <a href="${movie.book_url}" class="film-card-Vbutton">Book</a>
+                  </div>
+                `);
+              });
+              $('#no-results').hide();  // Hide "No results" message if results are found
+            } else {
+              $('#no-results').show().text(`No results found for "${query}".`);
+            }
+          }
+        });
+      } else {
+        $('#film-grid').empty();  // Clear results when search input is empty
+        $('#no-results').hide();  // Hide "No results" when query is cleared
+      }
+    }
+  </script>
+
+</body>
+
+</html>

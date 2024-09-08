@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reset Password</title>
+  <link rel="stylesheet" href="/static/css/forgotpass_style.css" />
+</head>
+
+<body class="Login_pg">
+  <div class="box">
+    <form method="POST" action="/resetPassword">
+
+      <h1>Reset Password</h1>
+
+      <div class="inputBox">
+        <span class="color">New Password</span>
+        <input type="password" name="newpass" required placeholder="New Password" id="newpass"
+          oninput="checkPasswords()" />
+        <i></i>
+      </div>
+      <div class="inputBox">
+        <span class="color">Confirm Password</span>
+        <input type="password" name="confirmpass" required placeholder="Confirm Password" id="confirmpass"
+          oninput="checkPasswords()" />
+        <i></i>
+      </div>
+
+      <!-- Submit button -->
+      <input type="submit" class="submit-pin1" value="Submit" id="submitBtn" disabled />
+
+      <!-- JavaScript -->
+      <script>
+        function checkPasswords() {
+          // Get the values of both password inputs
+          const newPassword = document.getElementById("newpass").value;
+          const confirmPassword =
+            document.getElementById("confirmpass").value;
+
+          // Get the submit button
+          const submitButton = document.getElementById("submitBtn");
+
+          // Check if passwords match
+          if (newPassword === confirmPassword && newPassword !== "") {
+            // Enable the submit button if passwords match
+            submitButton.disabled = false;
+          } else {
+            // Disable the submit button if passwords don't match
+            submitButton.disabled = true;
+          }
+        }
+      </script>
+    </form>
+  </div>
+  <script src="/static/js/script.js"></script>
+</body>
+
+</html>

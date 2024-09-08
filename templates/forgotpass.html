@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Frogot Password</title>
+    <link rel="stylesheet" href="/static/css/forgotpass_style.css" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+  </head>
+
+  <body class="Login_pg">
+    <div class="box">
+      <form method="POST" action="/sendemailpin">
+        <h1>Forgot Password</h1>
+
+
+        {% if userNotFound %}
+        <p class="error-message">User not found!</p>
+        {% endif %}
+        <div class="check-email">
+          <div class="inputBox">
+            <span class="color">Enter your:</span>
+            <input
+              type="email"
+              id="emailForgetpass"
+              name="email"
+              required
+              placeholder="Username or Email"
+            />
+            <i></i>
+          </div>
+
+          <input type="submit" value="Send" class="btn-check" id="sendButton" />
+        </div>
+        <a
+          class="back-btn"
+          href="{{ url_for('login') }}"
+          id="originalBackButton"
+          >Back</a
+        >
+      </form>
+      {% if userFound %}
+       <!--  disable form send email -->
+     <script> 
+        var inputEmail = document.getElementById("emailForgetpass");
+        inputEmail.readOnly = true;
+        inputEmail.disabled = true;
+        inputEmail.placeholder = "{{email}}";
+        var backButton = document.getElementById("originalBackButton");
+        backButton.remove();
+        var sendButton = document.getElementById("sendButton");
+        sendButton.disabled = true; // Disable the button
+        sendButton.classList.add("disabled-button");
+      </script>
+      
+      <!-- open form pin verify -->
+      <form method="POST" action="/verifyPin">
+        <div class="inputBox">
+          <span class="color">PIN Number</span>
+          <input type="number" name="pin" required placeholder="PIN number" />
+          <i></i>
+        </div>
+        <div class="buttons-forgotpass">
+          <a class="back-btn" href="{{ url_for('login') }}">Back</a>
+          <input class="submit-pin" type="submit" value="Submit" />
+        </div>
+      </form>
+
+      {% endif %}
+    </div>
+    <script src="/static/js/script.js"></script>
+  </body>
+</html>

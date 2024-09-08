@@ -1,0 +1,264 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #1c1c1c;
+
+}
+
+
+
+.box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 380px;
+    /* height: 420px; */
+    background: #1c1c1c;
+    border-radius: 10px;
+    overflow: hidden;
+
+}
+
+#box2 {
+    position: relative;
+    width: 480px;
+    height: 680px !important;
+    background: #1c1c1c;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 20px;
+}
+
+
+form {
+    inset: 4px;
+    background: #222;
+    padding: 10px 40px;
+    border-radius: 8px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+form>h1 {
+    color: #4dbf00;
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 0.1em;
+}
+
+.inputBox {
+    position: relative;
+    width: 300px;
+    margin-top: 30px;
+}
+
+.inputBox>input {
+    position: relative;
+    width: 100%;
+    padding: 20px 10px 10px;
+    background: transparent;
+    outline: none;
+    border: none;
+    box-shadow: none;
+    color: #23242a;
+    font-size: 1em;
+    letter-spacing: 0.05em;
+    transition: 0.5s;
+    z-index: 10;
+}
+
+.box>form>.inputbox>span {
+    position: absolute;
+    left: 0;
+    padding: 20px 10px 10px;
+    pointer-events: none;
+    color: #8f8f8f;
+    font-size: 1em;
+    letter-spacing: 0.05rem;
+    transition: 0.5s;
+}
+
+.box>form>.inputBox>input:valid~span,
+.box>form>.inputBox>input:focus~span {
+    color: #fff;
+    font-size: 0.75em;
+    transform: translateY(-34px);
+}
+
+.box form .inputBox i {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: #fff;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: 0.5s;
+    pointer-events: none;
+}
+
+.box form .inputBox input:valid~i,
+.box form .inputBox input:focus~i {
+    height: 44px;
+
+}
+
+.box form .links {
+    display: flex;
+    justify-content: space-between;
+    font-size: large;
+}
+
+.box form .links a {
+    margin: 10px 0;
+    font-size: 0.75em;
+    color: #4dbf00;
+    text-decoration: none;
+}
+
+.box form .links a:hover{
+    color: #fff;
+}
+
+.submit-pin {
+    border: none;
+    outline: none;
+    padding: 9px 25px;
+    background-color: #4dbf00;
+    cursor: pointer;
+    font-size: 0.9em;
+    border-radius: 4px;
+    font-weight: 600;
+    width: 100px;
+    color: #fff;
+    margin-top: 10px;
+}
+
+.submit-pin1 {
+    border: none;
+    outline: none;
+    padding: 10px ;
+    background-color: #4dbf00;
+    cursor: pointer;
+    font-size: 0.9em;
+    border-radius: 4px;
+    font-weight: 600;
+    width: 200px;
+    color: #fff;
+    margin-top: 15px;
+    align-self: center;
+}
+
+.box form input[type="submit"]:active {
+    opacity: 0.8;
+
+}
+
+.signup {
+    margin-top: 10px;
+    background-color: #4dbf00 !important;
+    color: #fff;
+}
+
+
+
+.color {
+    color: #fff;
+}
+
+.rad_gen{
+    margin-top: 6px;
+    color: #fff;
+}
+
+.flash {
+    padding: 10px;
+    margin-top: 7px;
+    border-radius: 5px;
+    text-align: center;
+  }
+  
+  .flash.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+  
+  .flash.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  .check-email{
+    display: flex;
+  }
+  .btn-check {
+    margin-top: 17%;
+    margin-left: 10px;
+    height: 47px;
+    width: 70px;
+    background-color: #4dbf00;
+    color: white;
+    border-radius: 6px;
+    font-weight: 600;
+    border: none;
+  }
+
+  /* hide arrows in number */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.buttons-forgotpass{
+    display: flex;
+    margin-top: 5px;
+    
+    justify-content: space-around;
+}
+
+.back-btn {
+    display: inline-block;   
+    width: 90px;
+    height: 45px;
+    margin-top: 10px;
+    background-color: red;
+    color: white;
+    border-radius: 4px;
+    font-weight: 600;
+    border: none;
+    text-align: center;     
+    line-height: 45px;       
+    text-decoration: none;   
+}
+
+.back-btn:hover{
+    background-color: #5a1717;
+    color: white;
+}
+
+.submit-pin:hover{
+    background-color: #1c5a29;
+    color: white;
+}
+
+.submit-pin1:hover{
+    background-color: #1c5a29;
+    color: white;
+}
+
+.btn-check:hover{
+    background-color: #1c5a29;
+    color: white;
+}

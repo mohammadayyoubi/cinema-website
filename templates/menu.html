@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food & Drinks</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Sen:wght@400;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+</head>
+
+<body>
+
+
+    <header>
+        <div class="navbar">
+            <div class="navbar-container">
+                <div class="logo-container">
+                    <h1 class="logo"><a href="{{ url_for('index') }}">Cinema</a></h1>
+                </div>
+                <div class="menu-container">
+                    <ul class="menu-list">
+                        <li class="menu-list-item"><a href="{{ url_for('movies') }}">Movies</a></li>
+                        <li class="menu-list-item"><a href="{{ url_for('menu') }}">Menu</a></li>
+                    </ul>
+                </div>
+
+                <div class="navbar-search">
+                    <form action="{{ url_for('search') }}" method="GET">
+                        <input type="text" name="query" placeholder="Search..." />
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                    </form>
+                </div>
+
+                <div class="profile-container">
+                    {% if user.profilePic == None %}
+                    <img class="profile-picture" src="/static/img/profile.jpg" alt="Profile Picture">
+                    {% else %}
+                    <img class="profile-picture" src="{{ url_for('serve_imageUser', user_id=user.id) }}" alt="{{ user.Uname }}">
+                    {% endif %}
+                <div class="profile-text-container">
+                        <select onchange="redirectTo(this)">
+                            <option value="settings" class="hidden">{{ user.Uname }}</option>
+                            <option value="{{ url_for('profile') }}">Profile</option>
+                            <option value="{{ url_for('logout') }}">Log Out</option>
+                        </select>
+
+                    </div>
+                    <div class="toggle">
+                        <i class="fas fa-moon toggle-icon"></i>
+                        <i class="fas fa-sun toggle-icon"></i>
+                        <div class="toggle-ball"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {% if user.role == "Admin" %}
+    <div class="buttons_menu">
+        <a href="#" onclick="openItemPopup()">Add Item</a>
+        <a href="#" onclick="openCategoryPopup()" id="AddCategory">Add Category</a>
+        <a href="#" onclick="toggleEditButtons()">Edit</a>
+
+    </div>
+
+    <!-- add category popup -->
+    <div id="popupCategory" class="popupProfile">
+        <h2>Add Category</h2>
+        <form action="/AddCategory" , method="post">
+            <div class="form-group">
+                <label for="category-name">Name</label>
+                <input type="text" id="category-name" name="category-name" required>
+            </div>
+            <button type="button" onclick="closeCategoryPopup()" class="cancelB">Cancel</button>
+            <button type="submit" class="submitB">Save</button>
+        </form>
+    </div>
+
+    <!-- Edit Category popup -->
+    <div id="editCategoryModal" class="popupProfile">
+        <h2>Edit Category</h2>
+        <form id="editCategoryForm" method="POST" action="/edit_category">
+            <input type="text" hidden readonly id="Ecategory-id" name="Ecategory-id"><br>
+            <label for="Ecategory-name">Category Name:</label>
+            <input type="text" id="Ecategory-name" name="Ecategory-name" required><br>
+            <button type="button" onclick="closeEditCategory()" class="cancelB">Cancel</button>
+            <button type="submit" class="submitB">Update</button>
+        </form>
+    </div>
+
+    <!-- Add Item popup -->
+    <div id="popupItem" class="popupProfile">
+        <h2>Add Item</h2>
+        <form action="/AddItem" method="post" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label id="fileLabel" class="custom-file-upload" for="fileInput">- please choose an image for the
+                    item</label>
+                <input type="file" id="fileInput" name="fileInput" onchange="displayFileName(this)" required hidden />
+            </div>
+
+
+            <div class="form-group">
+                <label for="item-name">Name</label>
+                <input type="text" id="item-name" name="item-name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="item-price">Price</label>
+                <input type="text" id="item-price" name="item-price" required>
+            </div>
+
+            <div class="form-group">
+                <label for="item-description">Description</label>
+                <input type="text" id="item-description" name="item-description" required>
+            </div>
+
+            <div class="form-group">
+                <label for="item-category">Category</label>
+                <select id="item-category" name="item-category" required>
+                    {% for Category in categories %}
+                    <option value="{{ Category.id }}">{{ Category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+
+            <button type="button" onclick="closeItemPopup()" class="cancelB">Cancel</button>
+            <button type="submit" class="submitB">Save</button>
+        </form>
+    </div>
+
+
+    <!-- Edit Item popup -->
+    <div id="popupEditItem" class="popupProfile">
+        <h2>Edit Item</h2>
+        <form method="post" action="/edit_item" enctype="multipart/form-data">
+            <div class="form-group">
+                <!-- <label id="fileLabel" class="custom-file-upload" for="fileInput">- please choose an image for the item</label> -->
+                <input type="file" id="fileInput" name="fileInput" onchange="displayFileName(this)" />
+            </div>
+
+            <input type="text" hidden id="Eitem-id" name="Eitem-id">
+            <div class="form-group">
+                <label for="Eitem-name">Name</label>
+                <input type="text" id="Eitem-name" name="Eitem-name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="Eitem-price">Price</label>
+                <input type="text" id="Eitem-price" name="Eitem-price" required>
+            </div>
+
+            <div class="form-group">
+                <label for="Eitem-description">Description</label>
+                <input type="text" id="Eitem-description" name="Eitem-description" required>
+            </div>
+
+            <div class="form-group">
+                <label for="Eitem-category">Category</label>
+                <select id="Eitem-category" name="Eitem-category" required>
+                    {% for Category in categories %}
+                    <option value="{{ Category.id }}">{{ Category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+
+            <button type="button" onclick="closeEditItem()" class="cancelB">Cancel</button>
+            <button type="submit" class="submitB">Save</button>
+        </form>
+    </div>
+
+
+
+    {% endif %}
+
+    <section class="food-menu">
+        {% for Category in categories %}
+
+        <div class="food-menu">
+
+            <h2>{{Category.name}} </h2>
+
+
+            <div class="edit-delete-buttons" style="display: none">
+
+                <button onclick="openEditCategory('{{ Category.id }}', '{{ Category.name }}')"><i
+                        class="fas fa-edit blue-icon_edit"></i></button>
+
+                <form id="delete-form-{{ Category.id }}"
+                    action="{{ url_for('delete_category', category_id=Category.id) }}" method="post"
+                    style="display: inline">
+                    <button type="submit"><i class="fas fa-trash-alt red-icon_trash"></i></button>
+                </form>
+            </div><br>
+            {% for item in items %}
+            {% if item.categoryId == Category.id %}
+            <div class="menu-item">
+                <div class="item-container">
+                    <div class="image-item">
+                        <img src="{{ url_for('serve_imageItem', item_id=item.id) }}" alt="{{ item.name }}">
+                    </div>
+
+                    <div class="content-item">
+                        <h3>{{ item.name }}</h3>
+                        <p>{{item.description}}</p>
+                        <span>{{item.price}} $</span>
+                    </div>
+                </div>
+                <div class="edit-delete-buttons" style="display: none">
+                    <!-- Example button for editing an item -->
+                    <button
+                        onclick="openEditItem('{{item.id}}' ,'{{ item.name }}', '{{ item.price }}', '{{ item.description }}', '{{ item.categoryId }}')">
+                        <i class="fas fa-edit blue-icon_edit"></i>
+                    </button>
+
+                    <form id="delete-form-{{ item.id }}" action="{{ url_for('delete_item', item_id=item.id) }}"
+                        method="post" style="display: inline">
+                        <button type="submit"><i class="fas fa-trash-alt red-icon_trash"></i></button>
+                    </form>
+                </div>
+
+
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div><br>
+        {% endfor %}
+
+
+
+        <!-- Add more food items -->
+    </section>
+
+
+
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section about">
+                <h2>About Us</h2>
+                <p>Welcome to CinemaTickets.com! We're your go-to destination for booking movie tickets online.
+                    Explore the latest blockbusters, indie gems, and timeless classics. With convenient online
+                    booking and exceptional customer service, we make your movie experience unforgettable.</p>
+                <br>
+                <div class="footer-section branches">
+                    <h2>Branches</h2>
+                    <ul>
+                        <li>Beirut - Downtown</li>
+                        <li>Saida - Spot Mall</li>
+                        <li>Jbeil - Le Mall</li>
+                        <li>Tripoli - Azmi Street</li>
+                    </ul>
+                </div>
+            </div>
+            <br>
+            <div class="footer-section follow-us">
+                <h2>Follow Us</h2>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+                <br><br><br>
+                <div>
+                    <div class="contact">
+                        <h2>Contact Us</h2>
+                        <span><i class="fas fa-phone"></i> 1-800-CINEMA</span>
+                        <span><i class="fas fa-envelope"></i> info@cinematickets.com</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2024 CinemaTickets.com | All rights reserved.
+        </div>
+    </footer>
+    <script src="/static/js/script.js"></script>
+
+
+</body>
+
+</html>
