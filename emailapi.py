@@ -5,8 +5,8 @@ import requests
 def send_simple_message(email):
     pin = generate_pin()  # Correctly call the function to generate the PIN
     response = requests.post(
-        "https://api.mailgun.net/v3/sandbox3ceaa358036244608f598cba5865bf95.mailgun.org/messages",
-        auth=("api", "f6e3c37753e8e6edbe1e8361cb6e4338-777a617d-59c24f7e"),
+        "https://api.mailgun.net/v3/#.mailgun.org/messages",
+        auth=("api","your api key"),
         data={
             "from": "verification@gmail.com",
             "to": [f"{email}"],
